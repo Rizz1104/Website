@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maukah kau menjadi pacarku?</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #fff0f5;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            color: #333;
+            transition: background-color 0.5s;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            text-align: center;
+        }
+
+        h1 {
+            color: #e83e8c;
+            font-size: 2.5rem;
+            margin-bottom: 30px;
+        }
+
+        .page {
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+
+        .active {
+            display: block;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .button {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .yes-btn {
+            background-color: #e83e8c;
+            color: white;
+        }
+
+        .no-btn {
+            background-color: #f8bbd0;
+            color: #333;
+        }
+
+        .button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .yes-btn:hover {
+            background-color: #d12272;
+        }
+
+        .no-btn:hover {
+            background-color: #f48fb1;
+        }
+
+        .heart {
+            position: absolute;
+            pointer-events: none;
+            opacity: 0;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(-100px) rotate(20deg); opacity: 0; }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .date-page {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .date-form {
+            background-color: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 5px 20px rgba(232, 62, 140, 0.1);
+            width: 100%;
+            max-width: 600px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #e83e8c;
+            font-weight: bold;
+        }
+
+        input[type="date"],
+        input[type="time"],
+        select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #f8bbd0;
+            border-radius: 10px;
+            font-size: 1rem;
+        }
+
+        .activity-options {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 20px;
+        }
+
+        .activity-option {
+            cursor: pointer;
+            padding: 15px;
+            border-radius: 10px;
+            transition: all 0.3s;
+            text-align: center;
+        }
+
+        .activity-option:hover {
+            background-color: #fce4ec;
+        }
+
+        .activity-option.selected {
+            background-color: #e83e8c;
+            color: white;
+        }
+
+        .activity-option img {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            border: 2px solid transparent;
+        }
+
+        .activity-option.selected img {
+            border-color: white;
+        }
+
+        .continue-btn {
+            margin-top: 30px;
+            background-color: #e83e8c;
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .continue-btn:hover {
+            background-color: #d12272;
+            transform: scale(1.05);
+        }
+
+        .confirmation-page {
+            padding: 20px;
+        }
+
+        .confirmation-card {
+            background-color: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 5px 20px rgba(232, 62, 140, 0.1);
+            max-width: 600px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .confirmation-card h2 {
+            color: #e83e8c;
+            margin-bottom: 20px;
+        }
+
+        .confirmation-details {
+            text-align: left;
+            margin-bottom: 30px;
+        }
+
+        .detail-row {
+            display: flex;
+            margin-bottom: 15px;
+        }
+
+        .detail-label {
+            font-weight: bold;
+            color: #e83e8c;
+            width: 120px;
+        }
+
+        .selected-image {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+            margin-top: 20px;
+            border: 3px solid #f8bbd0;
+        }
+
+        /* Responsive styles */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+
+            .button {
+                padding: 12px 24px;
+                font-size: 1rem;
+            }
+
+            .activity-options {
+                flex-direction: column;
+            }
+
+            .activity-option {
+                margin-bottom: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Page 1: Proposal -->
+    <div id="page1" class="page active">
+        <div class="container">
+            <h1>Maukah kau menjadi pacarku?</h1>
+            <p>Aku sudah memikirkan hal ini beberapa saat...</p>
+            <p>Aku sangat menyukaimu dan aku ingin kau menjadi milikku🥹</p>
+            <p>Apa yang kamu katakan??</p>
+            <div class="button-container">
+                <button id="yesBtn" class="button yes-btn">YA AKU MAU! ❤️</button>
+                <button id="noBtn" class="button no-btn">GK MAU!!! 💔</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Page 2: Date Planning -->
+    <div id="page2" class="page">
+        <div class="container date-page">
+            <h1>Ayo Rencanakan Kencan Pertama Kita!</h1>
+            <p>Aku tidak sabar untuk menghabiskan waktu bersama Kamu😁😁. Pilih kapan dan apa yang akan kita lakukan:</p>
+            
+            <form id="dateForm" class="date-form">
+                <div class="form-group">
+                    <label for="date">Tanggal:</label>
+                    <input type="date" id="date" name="date" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="time">Waktu:</label>
+                    <input type="time" id="time" name="time" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>Apa yang ingin kita lakukan??😽😽</label>
+                    <div class="activity-options">
+                        <div class="activity-option" data-value="Ketemuan">
+                            <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/c46268b0-cb81-4aff-b4db-6e4d07d13a97.png" alt="Romantic couple silhouette against sunset with colorful sky and heart shapes floating in the air" class="w-full rounded-lg mb-8">
+                            <p>Ketemuan 🤗</p>
+                        </div>
+                        <div class="activity-option" data-value="Mabar">
+                            <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/fed61923-ac7f-4f93-9492-c153efe0f35c.png" alt="Modern gaming setup with RGB lighting showing a developer coding in Visual Studio Code while playing multiplayer games with friends, dual monitors setup, mechanical keyboard with colorful backlight, energetic gaming atmosphere at night">
+                            <p>Mabar 📱</p>
+                        </div>
+                        <div class="activity-option" data-value="Makan Bersama">
+                            <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/a3404130-5ff0-4835-97f0-100ed2f95327.png"  alt="Pasangan romantis sedang makan malam di restoran mewah dengan lampu temaram, pria memegang gelas wine dan tersenyum kepada wanita yang sedang memotret makanan di piringnya">
+                            <p>Makan Bersama</p>
+                        </div>
+                    </div>
+                    <input type="hidden" id="activity" name="activity" required>
+                </div>
+                
+                <button type="button" id="continueBtn" class="continue-btn">Lanjutkan</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Page 3: Confirmation -->
+    <div id="page3" class="page">
+        <div class="container confirmation-page">
+            <h1>Tanggal Kita Sudah Ditetapkan! ❤️</h1>
+            <div class="confirmation-card">
+                <h2>Detail Tanggal</h2>
+                <div class="confirmation-details">
+                    <div class="detail-row">
+                        <div class="detail-label">Tanggal:</div>
+                        <div id="confirmation-date" class="detail-value"></div>
+                    </div>
+                    <div class="detail-row">
+                        <div class="detail-label">Waktu:</div>
+                        <div id="confirmation-time" class="detail-value"></div>
+                    </div>
+                    <div class="detail-row">
+                        <div class="detail-label">Aktifitas:</div>
+                        <div id="confirmation-activity" class="detail-value"></div>
+                    </div>
+                </div>
+                
+                <div id="activity-image-container">
+                    <img id="selected-activity-image" class="selected-image" src="" alt="">
+                </div>
+                
+                <p style="margin-top: 30px; font-size: 1.2rem;">
+                    Aku sangat bersemangat untuk kencan kita! Ini akan menjadi luar biasa ❤️
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Cursor heart trail effect
+        document.addEventListener('mousemove', function(e) {
+            const heart = document.createElement('div');
+            heart.classList.add('heart');
+            heart.innerHTML = '❤️';
+            heart.style.left = e.pageX + 'px';
+            heart.style.top = e.pageY + 'px';
+            heart.style.fontSize = Math.random() * 20 + 10 + 'px';
+            heart.style.animationDuration = Math.random() * 2 + 3 + 's';
+            
+            document.body.appendChild(heart);
+            
+            setTimeout(() => {
+                heart.remove();
+            }, 3000);
+        });
+
+        // No button movement effect
+        const noBtn = document.getElementById('noBtn');
+        let isMoving = false;
+
+        noBtn.addEventListener('mouseover', function() {
+            if (isMoving) return;
+            
+            isMoving = true;
+            setTimeout(() => {
+                // Random position within viewport
+                const maxX = window.innerWidth - noBtn.offsetWidth - 20;
+                const maxY = window.innerHeight - noBtn.offsetHeight - 20;
+                
+                noBtn.style.position = 'absolute';
+                noBtn.style.left = Math.random() * maxX + 'px';
+                noBtn.style.top = Math.random() * maxY + 'px';
+                
+                setTimeout(() => {
+                    isMoving = false;
+                }, 100);
+            }, 50);
+        });
+
+        // Page navigation
+        const yesBtn = document.getElementById('yesBtn');
+        const continueBtn = document.getElementById('continueBtn');
+        const pages = document.querySelectorAll('.page');
+        const activityOptions = document.querySelectorAll('.activity-option');
+        const activityInput = document.getElementById('activity');
+        
+        yesBtn.addEventListener('click', function() {
+            showPage('page2');
+        });
+        
+        continueBtn.addEventListener('click', function() {
+            if (document.getElementById('dateForm').reportValidity()) {
+                updateConfirmationPage();
+                showPage('page3');
+            }
+        });
+        
+        activityOptions.forEach(option => {
+            option.addEventListener('click', function() {
+                activityOptions.forEach(opt => opt.classList.remove('selected'));
+                this.classList.add('selected');
+                activityInput.value = this.dataset.value;
+            });
+        });
+        
+        function showPage(pageId) {
+            pages.forEach(page => {
+                page.classList.remove('active');
+            });
+            document.getElementById(pageId).classList.add('active');
+            
+            // Scroll to top when changing pages
+            window.scrollTo(0, 0);
+            
+            // Change background color based on page
+            if (pageId === 'page1') {
+                document.body.style.backgroundColor = '#fff0f5';
+            } else if (pageId === 'page2') {
+                document.body.style.backgroundColor = '#ffe6ee';
+            } else {
+                document.body.style.backgroundColor = '#ffd6e7';
+            }
+        }
+        
+        function updateConfirmationPage() {
+            document.getElementById('confirmation-date').textContent = document.getElementById('date').value;
+            document.getElementById('confirmation-time').textContent = document.getElementById('time').value;
+            
+            const activity = document.getElementById('activity').value;
+            let activityText = '';
+            let imageSrc = '';
+            
+            switch(activity) {
+                case 'Ketemuan':
+                    activityText = 'Ketemuan';
+                    imageSrc = 'https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/c46268b0-cb81-4aff-b4db-6e4d07d13a97.png';
+                    break;
+                case 'Mabar':
+                    activityText = 'Mabar';
+                    imageSrc = 'https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/fed61923-ac7f-4f93-9492-c153efe0f35c.png';
+                    break;
+                case 'Makan Bersama':
+                    activityText = 'Makan bersama';
+                    imageSrc = 'https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/a3404130-5ff0-4835-97f0-100ed2f95327.png';
+                    break;
+            }
+            
+            document.getElementById('confirmation-activity').textContent = activityText;
+            document.getElementById('selected-activity-image').src = imageSrc;
+            document.getElementById('selected-activity-image').alt = activityText;
+        }
+
+        // Set min date to today
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('date').min = today;
+    </script>
+</body>
+</html>
